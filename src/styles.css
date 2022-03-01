@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Poppinss, sans-serif;
+}
+
+body{
+    background: #222;
+    color: white;
+    transition: 0.5s;
+}
+body.light{
+    background: #ddd;
+    color: black;
+}
+nav{
+    display: flex;
+    min-height: 7.5%;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    font-size: 1.5rem;
+    gap: 2rem;
+    transition: 0.5s;
+    margin-bottom: 4rem;
+    padding: 1rem;
+}
+body.light nav{
+    background: #eee;
+}
+nav h2{
+    letter-spacing: 3px;
+}
+nav button{
+    padding: 0.25rem 0.5rem;
+    background: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: 0.5s;
+    font-size: 0.85rem;
+    outline: 1px solid rgba(255, 255, 255, 0);
+}
+nav button:hover{
+    background: #ddd;
+    animation: white-outline-hover 0.95s;
+}
+body.light nav button{
+    background: black;
+    color: white;
+}
+body.light nav button:hover{
+    background: #222;
+    animation: black-outline-hover 0.95s;
+}
+
+main{
+    max-width: 360px;
+    width: 100%;
+    margin: 2rem auto;
+}
+main .feedback{
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+    padding: 1rem 0.5rem;
+    background: white;
+    font-size: 1.35rem;
+    color: black;
+    border-radius: 0.5rem;
+    animation: fade-in 0.75s ease-out forwards;
+    transition: 0.5s;
+}
+body.light main .feedback{
+    color: white;
+    background: black;
+}
+main .guess{
+    height: 4rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.25rem;
+    margin: 1rem 0;
+}
+main .char{
+    height: 100%;
+    width: 100%;
+    background: #343434;
+    border: 2px solid #111;
+    transition: 0.5s;
+    text-transform: uppercase;
+    display: grid;
+    place-items: center;
+    font-size: 2rem;
+}
+body.light main .char{
+    border: 2px solid #ccc;
+    background: white;
+}
+main .char.inputted{
+    background: #444;
+    animation: input-effect 0.2s;
+}
+body.light main .char.inputted{
+    background: #eee;
+}
+main .char.flipped{
+    animation: flip-card 0.75s forwards;
+}
+main .char.correct-letter{
+    background: #c2ae00;
+}
+main .char.correct-position{
+    background: #00aa00;
+}
+body.light main .char.correct-letter{
+    background: #fff281;
+}
+body.light main .char.correct-position{
+    background: #c1ffc1;
+}
+
+div.win-msg-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    visibility: hidden;
+}
+div.win-msg{
+    position: relative;
+    background: black;
+    width: 100%;
+    max-width: 360px;
+    padding: 4rem 2rem;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 2rem;
+    border-radius: 2rem;
+    border: 1px solid #444;
+    opacity: 0;
+    transition: 1s;
+}
+div.win-msg .close{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5rem 0;
+    width: 12.5%;
+    height: 12.5%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.5s;
+}
+div.win-msg .close:hover{
+    color: #aaa;
+}
+div.win-msg .comment{
+    font-size: 1.5rem;
+    padding: 0.15rem 0;
+}
+div.win-msg-container.visible{
+    visibility: visible;
+}
+div.win-msg-container.visible div.win-msg{
+    opacity: 1;
+}
+
+@keyframes white-outline-hover{
+    0%{ outline-offset: 0; outline-color: white }
+    100%{ outline-offset: 1rem }
+}
+@keyframes black-outline-hover{
+    0%{ outline-offset: 0; outline-color: black }
+    100%{ outline-offset: 1rem }
+}
+@keyframes fade-in{
+    0%{ opacity: 0 }
+    100%{ opacity: 1 }
+}
+@keyframes flip-card{
+    100%{ transform: rotateX(180deg) scale(1, -1) }
+}
+@keyframes input-effect{
+    50%{ transform: scale(1.1) }
+    100%{ transform: scale(1) }
+}
