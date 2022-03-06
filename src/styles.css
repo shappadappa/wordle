@@ -107,7 +107,7 @@ body.light main .char.inputted{
     background: #eee;
 }
 main .char.flipped{
-    animation: flip-card 0.75s forwards;
+    animation: flip-card 0.65s forwards ease-in-out;
 }
 main .char.correct-letter{
     background: #c2ae00;
