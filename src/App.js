@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import './styles.css';
@@ -86,7 +87,6 @@ function App() {
             for(let i = 0; i < randomWord.length; i++){
               for(let z = 0; z < currentWord.length; z++){
                 if(randomWord.charAt(i) === currentWord.charAt(z) && i !== z){
-                  // eslint-disable-next-line no-loop-func
                   Array.from(currentGuess.children).forEach((char, index) =>{
                     if(char.innerHTML === randomWord.charAt(i) && guessedCharCount[currentWord.charAt(z)] < letterCounts[currentWord.charAt(z)]){
                       guessedCharCount[currentWord.charAt(z)]++;
