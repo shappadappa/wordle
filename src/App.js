@@ -15,6 +15,8 @@ function App() {
   let currentChar;
   let previousChar;
   let currentGuess;
+  
+  let [flippingChars, setFlippingChars] = useState(false);
 
   let currentWord = "";
 
@@ -27,106 +29,156 @@ function App() {
   let guessedCharCount = {};
 
   useEffect(() =>{
+    document.querySelector("button.word-randomizer").addEventListener("click", () =>{
+      reset();
+    });
+
+    Array.from(document.querySelectorAll("button")).forEach(btn =>{
+      btn.addEventListener("click", e =>{
+        btn.blur();
+      })
+    });
+
     console.log(randomWord);
     window.addEventListener("keyup", e =>{
-      setFeedbackDisplayed(false);
-      if(guesses < (randomWord.length + 1) && guessedWord === false){
-        currentGuess = document.querySelector(`div.guess.\\${guesses + 31}`);
-        currentChar = currentGuess.querySelector(`div.char.\\${charPos + 31}`);
-        previousChar = currentGuess.querySelector(`div.char.\\${charPos + 30}`) !== null ? currentGuess.querySelector(`div.char.\\${charPos + 30}`) : null;
-        
-        if(e.key === "Enter" && charPos === randomWord.length && (words.includes(currentWord) || allowedWords.includes(currentWord))){
-            guesses++;
-            setGuesses(guesses);
-            charPos = 0;
-
-            for(let i = 0; i < randomWord.length; i++){
-              letterCounts[randomWord.charAt(i)] = (randomWord.match(new RegExp(randomWord.charAt(i), "g")) || []).length;
-              guessedCharCount[randomWord.charAt(i)] = 0;
-            }
-
-            if(currentWord === randomWord){
-              guessedWord = true;
-              setTimeout(() =>{
-                document.querySelector(".win-msg-container").classList.add("visible");
-              }, (randomWord.length * 350) + 500);
-              switch(guesses){
-                case 1 : 
-                  setComment("Amazing"); 
-                  break;
-                case 2 : 
-                  setComment("Incredible"); 
-                  break;
-                case 3 : 
-                  setComment("Great"); 
-                  break;
-                case 4 : 
-                  setComment("Good"); 
-                  break;
-                case 5 : 
-                  setComment("Not bad"); 
-                  break;
-                case 6 : 
-                  setComment("Phew"); 
-                  break;
-                default : setComment("");
-              }
-            }
-
-            // checking the correct positions
-            for(let i = 0; i < randomWord.length; i++){
-              if(randomWord.charAt(i) === currentWord.charAt(i)){
-                guessedCharCount[randomWord.charAt(i)]++;
-                setTimeout(() => {
-                  currentGuess.querySelector(`:nth-child(${i + 1})`).classList.add("correct-position");
-                }, (350 * i) + (750 / 2));
-              }
-            }
-
-            // checking which letters are correct but in incorrect positions
-            for(let i = 0; i < randomWord.length; i++){
-              for(let z = 0; z < currentWord.length; z++){
-                if(randomWord.charAt(i) === currentWord.charAt(z) && i !== z){
-                  Array.from(currentGuess.children).forEach((char, index) =>{
-                    if(char.innerHTML === randomWord.charAt(i) && guessedCharCount[currentWord.charAt(z)] < letterCounts[currentWord.charAt(z)]){
-                      guessedCharCount[currentWord.charAt(z)]++;
-                      setTimeout(() => {
-                        char.classList.add("correct-letter");
-                      }, (350 * index) + (750 / 2));
-                    }
-                  })
-                }
-              }
-            }
-
-            // flipping the characters for the animation
-            Array.from(currentGuess.children).forEach((char, index) =>{
-              setTimeout(() => {
-                char.classList.add("flipped");
-              }, index * 350);
-            })
-
-            currentWord = "";
-        } else if(!(e.key === "Backspace") && /^[a-zA-Z]$/.test(e.key) && charPos < randomWord.length){
-            charPos++;
-            currentChar.innerHTML = e.key.toLowerCase();
-            currentGuess.querySelector(`:nth-child(${charPos})`).classList.add("inputted");
-            currentWord += e.key;
-        } else if(e.key === "Backspace" && charPos > 0){
-            if(previousChar !== null) previousChar.innerHTML = "";
-            currentWord = currentWord.slice(0, currentWord.length - 1);
-            currentGuess.querySelector(`:nth-child(${charPos})`).classList.remove("inputted");
-            charPos--;
-        } else if(e.key === "Enter" && charPos < randomWord.length){
-          setFeedback("Not enough letters");
-          setFeedbackDisplayed(true);
-        } else if((!allowedWords.includes(currentWord) || !words.includes(currentWord)) && e.key === "Enter"){
-          setFeedback("Not in word list");
-          setFeedbackDisplayed(true);
-        }
-      }
+      handleKeyInput(e.key);
     });
   }, []);
+
+  const handleKeyInput = key =>{
+    setFeedbackDisplayed(false);
+
+    if(guesses < (randomWord.length + 1) && guessedWord === false && flippingChars === false){
+      console.log(`GUESSES: ${guesses}`)
+      currentGuess = document.querySelector(`div.guess.\\${guesses + 31}`);
+      currentChar = currentGuess.querySelector(`div.char.\\${charPos + 31}`);
+      previousChar = currentGuess.querySelector(`div.char.\\${charPos + 30}`) !== null ? currentGuess.querySelector(`div.char.\\${charPos + 30}`) : null;
+      
+      if(key === "Enter" && charPos === randomWord.length && (words.includes(currentWord) || allowedWords.includes(currentWord)) && flippingChars === false){
+          guesses++;
+          setGuesses(guesses);
+          charPos = 0;
+
+          for(let i = 0; i < randomWord.length; i++){
+            letterCounts[randomWord.charAt(i)] = (randomWord.match(new RegExp(randomWord.charAt(i), "g")) || []).length;
+            guessedCharCount[randomWord.charAt(i)] = 0;
+          }
+
+          if(currentWord === randomWord){
+            guessedWord = true;
+            setTimeout(() =>{
+              document.querySelector(".win-msg-container").classList.add("visible");
+            }, (randomWord.length * 350) + 500);
+            switch(guesses){
+              case 1 : 
+                setComment("Amazing"); 
+                break;
+              case 2 : 
+                setComment("Incredible"); 
+                break;
+              case 3 : 
+                setComment("Great"); 
+                break;
+              case 4 : 
+                setComment("Good"); 
+                break;
+              case 5 : 
+                setComment("Not bad"); 
+                break;
+              case 6 : 
+                setComment("Phew"); 
+                break;
+              default : setComment("");
+            }
+          }
+
+          // checking the correct positions
+          for(let i = 0; i < randomWord.length; i++){
+            if(randomWord.charAt(i) === currentWord.charAt(i)){
+              guessedCharCount[randomWord.charAt(i)]++;
+              setTimeout(() => {
+                currentGuess.querySelector(`:nth-child(${i + 1})`).classList.add("correct-position");
+              }, (350 * i) + (750 / 2));
+            }
+          }
+
+          // checking which letters are correct but in incorrect positions
+          for(let i = 0; i < randomWord.length; i++){
+            for(let z = 0; z < currentWord.length; z++){
+              if(randomWord.charAt(i) === currentWord.charAt(z) && i !== z){
+                Array.from(currentGuess.children).forEach((char, index) =>{
+                  if(char.innerHTML === randomWord.charAt(i) && guessedCharCount[currentWord.charAt(z)] < letterCounts[currentWord.charAt(z)]){
+                    guessedCharCount[currentWord.charAt(z)]++;
+                    setTimeout(() => {
+                      char.classList.add("correct-letter");
+                    }, (350 * index) + (750 / 2));
+                  }
+                })
+              }
+            }
+          }
+
+          // flipping the characters for the animation
+          Array.from(currentGuess.children).forEach((char, index) =>{
+            flippingChars = true;
+            setFlippingChars(true);
+            setTimeout(() => {
+              char.classList.add("flipped");
+            }, index * 350);
+          })
+
+          setTimeout(() => {
+            flippingChars = false;
+            setFlippingChars(false);
+          }, currentGuess.children.length * 350);
+
+          currentWord = "";
+      } else if(!(key === "Backspace") && /^[a-zA-Z]$/.test(key) && charPos < randomWord.length && flippingChars === false){
+        charPos++;
+        currentChar.innerHTML = key.toLowerCase();
+        currentGuess.querySelector(`:nth-child(${charPos})`).classList.add("inputted");
+        currentWord += key;
+      } else if(key === "Backspace" && charPos > 0 && flippingChars === false){
+        if(previousChar !== null) previousChar.innerHTML = "";
+        currentWord = currentWord.slice(0, currentWord.length - 1);
+        currentGuess.querySelector(`:nth-child(${charPos})`).classList.remove("inputted");
+        charPos--;
+      } else if(key === "Enter" && charPos < randomWord.length && flippingChars === false){
+        setFeedback("Not enough letters");
+        setFeedbackDisplayed(true);
+      } else if((!allowedWords.includes(currentWord) || !words.includes(currentWord)) && key === "Enter" && flippingChars === false){
+        setFeedback("Not in word list");
+        setFeedbackDisplayed(true);
+      }
+    } else if(guesses >= (randomWord.length + 1)){
+      setFeedback(`You lost, the word was '${randomWord}'`);
+      setFeedbackDisplayed(true);
+    }
+  }
+
+  const reset = () =>{
+    Array.from(document.querySelector(".gamespace").children).forEach(guess =>{
+      Array.from(guess.children).forEach(char =>{
+        char.classList.remove("correct-position");
+        char.classList.remove("correct-letter");
+        char.classList.remove("flipped");
+        char.classList.remove("inputted");
+        char.innerHTML = "";
+      })
+    })
+
+    charPos = 0;
+    guesses = 0;
+    setGuesses(0);
+    guessedWord = false;
+    flippingChars = false;
+    setFlippingChars(false);
+    randomWord = words[Math.floor((Math.random() * words.length))];
+    currentGuess = document.querySelector(`div.guess.\\${0 + 31}`);
+    currentChar = currentGuess.querySelector(`div.char.\\${charPos + 31}`);
+    previousChar = currentGuess.querySelector(`div.char.\\${charPos + 30}`) !== null ? currentGuess.querySelector(`div.char.\\${charPos + 30}`) : null;
+    currentWord = "";
+  }
 
   return (
     <>
@@ -144,7 +196,7 @@ function App() {
         </div>
         <h2>Wordle</h2>
         <div className="randomizer-container">
-          <button className="word-randomizer" onClick={() =>{ }}><i className="bi bi-shuffle"></i></button>
+          <button className="word-randomizer" disabled={flippingChars}><i className="bi bi-shuffle"></i></button>
         </div>
       </nav>
 

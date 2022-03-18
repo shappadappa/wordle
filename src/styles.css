@@ -47,6 +47,9 @@ nav button:hover{
     background: #ddd;
     animation: white-outline-hover 0.95s;
 }
+nav button:disabled{
+    cursor: not-allowed;
+}
 body.light nav button{
     background: black;
     color: white;
@@ -101,7 +104,7 @@ body.light main .char{
 }
 main .char.inputted{
     background: #444;
-    animation: input-effect 0.2s;
+    animation: input-effect 0.05s;
 }
 body.light main .char.inputted{
     background: #eee;
@@ -189,6 +192,6 @@ div.win-msg-container.visible div.win-msg{
     100%{ transform: rotateX(180deg) scale(1, -1) }
 }
 @keyframes input-effect{
-    50%{ transform: scale(1.1) }
+    50%{ transform: scale(1.2) }
     100%{ transform: scale(1) }
 }
