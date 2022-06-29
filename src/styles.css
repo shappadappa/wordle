@@ -67,25 +67,29 @@ body.light nav button:hover{
 main .feedback{
     position: relative;
     margin: 0 auto;
-    text-align: center;
-    padding: 1rem 0.5rem;
+    min-height: 2rem;
+    display: grid;
+    place-items: center;
+    padding: 0.75rem 0.5rem;
     background: white;
     font-size: 1.35rem;
     color: black;
     border-radius: 0.5rem;
-    animation: fade-in 0.75s ease-out forwards;
-    transition: 0.5s;
+    opacity: 0;
 }
 body.light main .feedback{
     color: white;
     background: black;
+}
+main .feedback.visible{
+    animation: fade-in 0.75s ease-out forwards;
 }
 main .guess{
     height: 4rem;
     display: flex;
     justify-content: space-between;
     gap: 0.25rem;
-    margin: 1rem 0;
+    margin: 0.75rem 0;
 }
 main .char{
     height: 100%;
@@ -110,7 +114,7 @@ body.light main .char.inputted{
     background: #eee;
 }
 main .char.flipped{
-    animation: flip-card 0.65s forwards ease-in-out;
+    animation: flip-card 0.55s forwards ease-in-out;
 }
 main .char.correct-letter{
     background: #c2ae00;
@@ -141,7 +145,7 @@ div.win-msg{
     position: relative;
     background: black;
     width: 100%;
-    max-width: 360px;
+    max-width: 500px;
     padding: 4rem 2rem;
     box-sizing: border-box;
     text-align: center;
